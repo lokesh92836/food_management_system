@@ -38,7 +38,7 @@ const DonationDetails = () => {
     setActionLoading(true);
     try {
       await donationService.claim(id);
-      toast.success("Food reserved successfully! Waiting for restaurant approval.");
+      toast.success("Food claimed and approved successfully!");
       fetchDonationDetails();
     } catch (err) {
       toast.error(err.response?.data?.error || "Failed to claim food.");
@@ -147,7 +147,7 @@ const DonationDetails = () => {
   // Stepper timeline calculation
   const stepperStates = [
     { label: 'Available', status: 'AVAILABLE', completed: true },
-    { label: 'Claimed (Pending Approval)', status: 'RESERVED', completed: ['RESERVED', 'PICKED_UP', 'DELIVERED'].includes(donation.status) },
+    { label: 'Claimed & Approved', status: 'RESERVED', completed: ['RESERVED', 'PICKED_UP', 'DELIVERED'].includes(donation.status) },
     { label: 'En Route (Picked Up)', status: 'PICKED_UP', completed: ['PICKED_UP', 'DELIVERED'].includes(donation.status) },
     { label: 'Delivered', status: 'DELIVERED', completed: donation.status === 'DELIVERED' }
   ];
