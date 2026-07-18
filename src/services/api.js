@@ -20,12 +20,22 @@ const api = axios.create({
   },
 });
 
-// Attach JWT access token to requests
+// Attach JWT access token to requests (skip for public auth routes)
 api.interceptors.request.use(
   (config) => {
-    const token = store.getState().auth.accessToken;
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+    const isPublicAuth = config.url && (
+      config.url.includes('/auth/login/') ||
+      config.url.includes('/auth/register/') ||
+      config.url.includes('/auth/verify-email/') ||
+      config.url.includes('/auth/forgot-password/') ||
+      config.url.includes('/auth/reset-password/')
+    );
+
+    if (!isPublicAuth) {
+      const token = store.getState().auth.accessToken;
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
     }
     return config;
   },
