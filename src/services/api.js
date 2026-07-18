@@ -2,8 +2,19 @@ import axios from 'axios';
 import { store } from '../store';
 import { setCredentials, logout } from '../store/authSlice';
 
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Bulletproof fallback: If running on a live domain (like Vercel), route to Render
+  if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+    return 'https://django-backend-tyqe.onrender.com';
+  }
+  return 'http://127.0.0.1:8000';
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000',
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },
